@@ -9,15 +9,12 @@ use think\Request;
 class Deal extends Admin{//http://www.tp.com/admin/deal/index.html
     //报修列表
     public function index(){
-        $pid = input('get.pid',0);
         //获取数据
-
-        $map = ['status'=>['gt',-1],'pid'=>$pid];
+        $map = ['status'=>['gt',-1]];
         //根据状态和Pid获取所有数据
-        $list = Db::name('deal')->where($map)->order(['id '=>'asc'])->select();
+        $list = Db::name('deal')->where($map)->order(['id '=>'asc'])->paginate(3);
         //分配数据
         $this->assign('list',$list);
-        $this->assign('pid',$pid);
         $this->assign('meta_title' , '导航管理');
         //页面
         return $this->fetch();
@@ -48,14 +45,6 @@ class Deal extends Admin{//http://www.tp.com/admin/deal/index.html
                 $this->error($Deal->getError());
             }
         }else{//通过连接点击添加
-            $pid = input('pid',0);
-            if(!empty($pid)){
-                //根据pid获取父导航
-                $parent = Db::name('deal')->where(['id'=>$pid])->field('title')->find();
-                //返回父导航
-                $this->assign('parent',$parent);
-            }
-            $this->assign('pid', $pid);
             $this->assign('info',null);
             $this->assign('meta_title', '新增导航');
             //页面
@@ -70,6 +59,12 @@ class Deal extends Admin{//http://www.tp.com/admin/deal/index.html
 //            var_dump($data);exit;
             //实例化数据库
             $deal = Db::name('deal');
+            //调用验证方法自动验证
+            $validate = validate('deal');
+            //如果验证失败 提示错误信息
+            if(!$validate->check($data)){
+                return $this->error($validate->getError());
+            }
             //修改数据
             $data['update_time']=time();
             $deal->update($data);
@@ -90,10 +85,11 @@ class Deal extends Admin{//http://www.tp.com/admin/deal/index.html
     }
     //删除
     public function del(){
+        //用/a强制转换成数组
         $id = array_unique((array)input('id/a',0));// array_unique 移除数组中重复的值
 
         if ( empty($id) ) {
-            $this->error('请选择要操作的数据!');
+            $this->error("非法操作！",url('classify'));
         }
         $map = ['id'=>['in',$id]];
         if(Db::name('deal')->where($map)->delete()){

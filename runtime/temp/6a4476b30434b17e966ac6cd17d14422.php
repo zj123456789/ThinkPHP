@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:66:"D:\www\tp\public/../application/admin/view/default/deal\index.html";i:1506751649;s:67:"D:\www\tp\public/../application/admin/view/default/public\base.html";i:1496373782;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:66:"D:\www\tp\public/../application/admin/view/default/rental\add.html";i:1507023945;s:67:"D:\www\tp\public/../application/admin/view/default/public\base.html";i:1496373782;}*/ ?>
 <!doctype html>
 <html>
 <head>
@@ -100,65 +100,133 @@
             
 
             
-	<div class="main-title">
-		<h2>导航管理</h2>
-	</div>
 
-	<div class="cf">
-		<a class="btn" href="<?php echo url('add','pid='.$pid); ?>">新 增</a>
-		<button class="btn " url="<?php echo url('del?id='.input('ids')); ?>">删除</button>
-		
-		<button class="btn list_sort" url="<?php echo url('sort',array('pid'=>input('get.pid',0)),''); ?>">排序</button>
-	</div>
-
-	<div class="data-table table-striped">
-		<table>
-			<thead>
-				<tr>
-					<th class="row-selected">
-						<input class="checkbox check-all" type="checkbox" >
-					</th>
-					<th>ID</th>
-					<th>报修人</th>
-					<th>报修地址</th>
-					<th>报修电话</th>
-					<th>问题</th>
-					<th>报修时间</th>
-					<th>完成时间</th>
-                    <th>状态</th>
-                    <th>排序</th>
-					<th>操作</th>
-				</tr>
-			</thead>
-			<tbody>
-				<?php if(!(empty($list) || (($list instanceof \think\Collection || $list instanceof \think\Paginator ) && $list->isEmpty()))): if(is_array($list) || $list instanceof \think\Collection || $list instanceof \think\Paginator): $i = 0; $__LIST__ = $list;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$deal): $mod = ($i % 2 );++$i;?>
-					<tr data-id="del?id='.$deal['id']">
-						<td><input class="ids row-selected" type="checkbox" name="ids[]" id="" value="<?php echo $channel['id']; ?>"> </td>
-						<td><?php echo $deal['id']; ?></td>
-						<td><?php echo $deal['username']; ?></td>
-						<td><?php echo $deal['address']; ?></td>
-                        <td><?php echo $deal['tel']; ?></td>
-                        <td><?php echo $deal['problem']; ?></td>
-						<td><?php echo time_format($deal['create_time']); ?></td>
-						<td><?php echo time_format($deal['update_time']); ?></td>
-                        <td><?php echo !empty($deal['status']) && $deal['status']==2?'已修理':'待修理'; ?></td>
-                        <td><?php echo $deal['sort']; ?></td>
-
-						<td>
-							<a title="编辑" href="<?php echo url('edit?id='.$deal['id'].'&pid='.$pid); ?>">编辑</a>
-							<a href="<?php echo url('setStatus?ids='.$deal['id'].'&status='.abs(1-$deal['status'])); ?>" class="ajax-get"><?php echo show_status_op($deal['status']); ?></a>
-							<a class="confirm ajax-get" title="删除" href="<?php echo url('del?id='.$deal['id']); ?>">删除</a>
-						</td>
-					</tr>
-				<?php endforeach; endif; else: echo "" ;endif; else: ?>
-				<td colspan="6" class="text-center"> aOh! 暂时还没有内容! </td>
-				<?php endif; ?>
-			</tbody>
-		</table>
-	</div>
-<div class="page">
-	<?php echo $list->render(); ?>
+<div class="main-title">
+    <h2><?php echo isset($info['id'])?'编辑':'新增'; ?>租售</h2>
 </div>
+<form action="<?php echo url(); ?>" method="post" class="form-horizontal">
+    <div class="form-item">
+        <label class="item-label">标题<span class="check-tips">（标题）</span></label>
+        <div class="controls">
+            <input type="text" class="text input-large" name="title" value="<?php echo (isset($info['title']) && ($info['title'] !== '')?$info['title']:''); ?>">
+        </div>
+    </div>
+
+
+    <div class="form-item">
+        <label class="item-label">发布人<span class="check-tips">（发布人）</span></label>
+        <div class="controls">
+            <input type="text" class="text input-large" name="name" value="<?php echo (isset($info['name']) && ($info['name'] !== '')?$info['name']:''); ?>">
+        </div>
+    </div>
+
+    <div class="form-item">
+        <label class="item-label">价格</label>
+        <div class="controls">
+            <input type="text" class="text input-large" name="price" value="<?php echo (isset($info['price']) && ($info['price'] !== '')?$info['price']:''); ?>">&nbsp;
+            单位：
+            <select style="width: 200px;" name="company">
+                <option value="1"  <?php if($info[company]==1) echo("selected");?>>元/月</option>
+                <option value="2" <?php if($info[company]==2) echo("selected");?>>万元</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-item">
+        <label class="item-label">类型</label>
+        <div class="controls">
+            <select style="width: 200px;" name="type" >
+                <option value="1" <?php if($info[type]==1) echo("selected");?>>出租</option>
+                <option value="2" <?php if($info[type]==2) echo("selected");?>>销售</option>
+            </select>
+        </div>
+    </div>
+
+    <!--<div class="form-item">-->
+    <!--<label class="item-label">模块<span class="check-tips">（所属模块）</span></label>-->
+    <!--<div class="controls">-->
+    <!--<input type="text" class="text input-large" name="module" value="<?php echo (isset($info['module']) && ($info['module'] !== '')?$info['module']:'admin'); ?>">-->
+    <!--</div>-->
+    <!--</div>-->
+
+    <div class="form-item">
+
+        <input type="hidden" name="content" value="0">
+        <link rel="stylesheet" href="/static/static/kindeditor/default/default.css">
+        <script charset="utf-8" src="/static/static/kindeditor/kindeditor-min.js"></script>
+        <script charset="utf-8" src="/static/static/kindeditor/zh_CN.js"></script>
+        <script type="text/javascript">
+            var editor_content;
+            KindEditor.ready(function(K) {
+                editor_content = K.create('textarea[name="content"]', {
+                    allowFileManager : false,
+                    themesPath: K.basePath,
+                    width: '100%',
+                    height: '500px',
+                    resizeType: 1,
+                    pasteType : 2,
+                    urlType : 'absolute',
+                    fileManagerJson : '/admin.php/Sale/fileManagerJson.html',
+                    //uploadJson : '/admin.php/Sale/uploadJson.html' }
+                    uploadJson : '/admin.php/Addons/execute/_addons/EditorForAdmin/_controller/Upload/_action/ke_upimg.html',
+                    extraFileUploadParams: {
+                        session_id : 'l73ulcq0704fh7sc8e5e5rtvg3'
+                    }
+                });
+            });
+
+            $(function(){
+                //传统表单提交同步
+                $('textarea[name="content"]').closest('form').submit(function(){
+                    editor_content.sync();
+                });
+                //ajax提交之前同步
+                $('button[type="submit"],#submit,.ajax-post,#autoSave').click(function(){
+                    editor_content.sync();
+                });
+            })
+        </script>
+
+        </label>
+    </div>
+
+    <div class="form-item ">
+        <label class="item-label">描述<span class="check-tips"></span></label>
+        <div class="controls">
+            <label class="textarea input-large">
+                <textarea name="description"><?php echo (isset($info['description']) && ($info['description'] !== '')?$info['description']:''); ?></textarea>
+            </label>                    </div>
+    </div>
+
+    <div class="form-item">
+        <label class="item-label">详情<span class="check-tips">（活动详情）</span></label>
+        <textarea name="content" rows="8" cols="50"><?php echo (isset($info['content']) && ($info['content'] !== '')?$info['content']:''); ?></textarea>
+    </div>
+    <div class="form-item">
+        <label class="item-label">截止日期<span class="check-tips"></span></label>
+        <div class="controls">
+            <input type="text" class="text input-mid" name="end_time" value="<?php echo (isset($info['end_time']) && ($info['end_time'] !== '')?$info['end_time']:''); ?>">                    </div>
+    </div>
+
+    <div class="form-item">
+        <label class="item-label">电话<span class="check-tips">（联系电话）</span></label>
+        <div class="controls">
+            <input type="text" class="text input-small" name="tel" value="<?php echo (isset($info['tel']) && ($info['tel'] !== '')?$info['tel']:''); ?>">
+        </div>
+    </div>
+    <!--<div class="form-item">-->
+        <!--<label class="item-label">状态<span class="check-tips">（处理状态）</span></label>-->
+        <!--<div class="controls">-->
+            <!--<label class="radio"><input type="radio" name="status" value="1" <?php if($info[status]==1) echo("checked");?>>正常</label>-->
+            <!--<label class="radio"><input type="radio" name="status" value="0" <?php if($info[status]==0) echo("checked");?>>失效</label>-->
+        <!--</div>-->
+    <!--</div>-->
+    <div class="form-item">
+        <input type="hidden" name="id" value="<?php echo (isset($info['id']) && ($info['id'] !== '')?$info['id']:''); ?>">
+        <button class="btn submit-btn ajax-posts" id="submit" type="submit" target-form="form-horizontal">确 定</button>
+        <button class="btn btn-return" onclick="javascript:history.back(-1);return false;">返 回</button>
+    </div>
+</form>
 
         </div>
         <div class="cont-ft">
@@ -257,25 +325,11 @@
     </script>
     
 <script type="text/javascript">
-    $(function() {
-    	//点击排序
-    	$('.list_sort').click(function(){
-    		var url = $(this).attr('url');
-    		var ids = $('.ids:checked');
-    		var param = '';
-    		if(ids.length > 0){
-    			var str = new Array();
-    			ids.each(function(){
-    				str.push($(this).val());
-    			});
-    			param = str.join(',');
-    		}
-
-    		if(url != undefined && url != ''){
-    			window.location.href = url + '/ids/' + param;
-    		}
-    	});
-    });
+    Think.setValue("pid", <?php echo (isset($info['pid']) && ($info['pid'] !== '')?$info['pid']: 0); ?>);
+    Think.setValue("hide", <?php echo (isset($info['hide']) && ($info['hide'] !== '')?$info['hide']: 0); ?>);
+    Think.setValue("is_dev", <?php echo (isset($info['is_dev']) && ($info['is_dev'] !== '')?$info['is_dev']: 0); ?>);
+    //导航高亮
+    highlight_subnav('<?php echo url('index'); ?>');
 </script>
 
 </body>

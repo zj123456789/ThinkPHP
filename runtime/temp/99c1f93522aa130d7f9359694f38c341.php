@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:66:"D:\www\tp\public/../application/admin/view/default/deal\index.html";i:1506751649;s:67:"D:\www\tp\public/../application/admin/view/default/public\base.html";i:1496373782;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:68:"D:\www\tp\public/../application/admin/view/default/config\index.html";i:1496373782;s:67:"D:\www\tp\public/../application/admin/view/default/public\base.html";i:1496373782;}*/ ?>
 <!doctype html>
 <html>
 <head>
@@ -101,14 +101,24 @@
 
             
 	<div class="main-title">
-		<h2>导航管理</h2>
+		<h2>配置管理 [ <?php if(Think.get.group): ?>
+         <a href="<?php echo url('index'); ?>">全部</a><?php else: ?><strong>全部</strong><?php endif; ?>&nbsp;<?php if(is_array($group) || $group instanceof \think\Collection || $group instanceof \think\Paginator): if( count($group)==0 ) : echo "" ;else: foreach($group as $key=>$vo): if($group_id != $key): ?>
+         <a href="<?php echo url('index?group='.$key); ?>"><?php echo $vo; ?></a><?php else: ?><strong><?php echo $vo; ?></strong><?php endif; ?>&nbsp;     
+        <?php endforeach; endif; else: echo "" ;endif; ?> ]</h2>
 	</div>
 
 	<div class="cf">
-		<a class="btn" href="<?php echo url('add','pid='.$pid); ?>">新 增</a>
-		<button class="btn " url="<?php echo url('del?id='.input('ids')); ?>">删除</button>
-		
-		<button class="btn list_sort" url="<?php echo url('sort',array('pid'=>input('get.pid',0)),''); ?>">排序</button>
+		<a class="btn" href="<?php echo url('add'); ?>">新 增</a>
+		<button class="btn ajax-post confirm" url="<?php echo url('del'); ?>" target-form="ids">删 除</button>
+		<button class="btn list_sort" url="<?php echo url('sort?group='.input('group'),'',''); ?>">排序</button>
+        
+		<!-- 高级搜索 -->
+		<div class="search-form fr cf">
+			<div class="sleft">
+				<input type="text" name="name" class="search-input" value="<?php echo input('name'); ?>" placeholder="请输入配置名称">
+				<a class="sch-btn" href="javascript:;" id="search" url="<?php echo url('config/index'); ?>"><i class="btn-search"></i></a>
+			</div>
+		</div>
 	</div>
 
 	<div class="data-table table-striped">
@@ -116,38 +126,28 @@
 			<thead>
 				<tr>
 					<th class="row-selected">
-						<input class="checkbox check-all" type="checkbox" >
+						<input class="checkbox check-all" type="checkbox">
 					</th>
 					<th>ID</th>
-					<th>报修人</th>
-					<th>报修地址</th>
-					<th>报修电话</th>
-					<th>问题</th>
-					<th>报修时间</th>
-					<th>完成时间</th>
-                    <th>状态</th>
-                    <th>排序</th>
+					<th>名称</th>
+					<th>标题</th>
+					<th>分组</th>
+					<th>类型</th>
 					<th>操作</th>
 				</tr>
 			</thead>
 			<tbody>
-				<?php if(!(empty($list) || (($list instanceof \think\Collection || $list instanceof \think\Paginator ) && $list->isEmpty()))): if(is_array($list) || $list instanceof \think\Collection || $list instanceof \think\Paginator): $i = 0; $__LIST__ = $list;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$deal): $mod = ($i % 2 );++$i;?>
-					<tr data-id="del?id='.$deal['id']">
-						<td><input class="ids row-selected" type="checkbox" name="ids[]" id="" value="<?php echo $channel['id']; ?>"> </td>
-						<td><?php echo $deal['id']; ?></td>
-						<td><?php echo $deal['username']; ?></td>
-						<td><?php echo $deal['address']; ?></td>
-                        <td><?php echo $deal['tel']; ?></td>
-                        <td><?php echo $deal['problem']; ?></td>
-						<td><?php echo time_format($deal['create_time']); ?></td>
-						<td><?php echo time_format($deal['update_time']); ?></td>
-                        <td><?php echo !empty($deal['status']) && $deal['status']==2?'已修理':'待修理'; ?></td>
-                        <td><?php echo $deal['sort']; ?></td>
-
+				<?php if(!(empty($list) || (($list instanceof \think\Collection || $list instanceof \think\Paginator ) && $list->isEmpty()))): if(is_array($list) || $list instanceof \think\Collection || $list instanceof \think\Paginator): $i = 0; $__LIST__ = $list;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$config): $mod = ($i % 2 );++$i;?> 
+					<tr>
+						<td><input class="ids row-selected" type="checkbox" name="id[]" value="<?php echo $config['id']; ?>"></td>
+						<td><?php echo $config['id']; ?></td>
+						<td><a href="<?php echo url('edit?id='.$config['id']); ?>"><?php echo $config['name']; ?></a></td>
+						<td><?php echo $config['title']; ?></td>
+						<td><?php echo get_config_group($config['group']); ?></td>
+						<td><?php echo get_config_type($config['type']); ?></td>
 						<td>
-							<a title="编辑" href="<?php echo url('edit?id='.$deal['id'].'&pid='.$pid); ?>">编辑</a>
-							<a href="<?php echo url('setStatus?ids='.$deal['id'].'&status='.abs(1-$deal['status'])); ?>" class="ajax-get"><?php echo show_status_op($deal['status']); ?></a>
-							<a class="confirm ajax-get" title="删除" href="<?php echo url('del?id='.$deal['id']); ?>">删除</a>
+							<a title="编辑" href="<?php echo url('edit?id='.$config['id']); ?>">编辑</a>
+							<a class="confirm ajax-get" title="删除" href="<?php echo url('del?id='.$config['id']); ?>">删除</a>
 						</td>
 					</tr>
 				<?php endforeach; endif; else: echo "" ;endif; else: ?>
@@ -155,10 +155,11 @@
 				<?php endif; ?>
 			</tbody>
 		</table>
+		<!-- 分页 -->
+	    <div class="page">
+	        <?php echo $_page; ?>
+	    </div>
 	</div>
-<div class="page">
-	<?php echo $list->render(); ?>
-</div>
 
         </div>
         <div class="cont-ft">
@@ -257,25 +258,45 @@
     </script>
     
 <script type="text/javascript">
-    $(function() {
-    	//点击排序
-    	$('.list_sort').click(function(){
-    		var url = $(this).attr('url');
-    		var ids = $('.ids:checked');
-    		var param = '';
-    		if(ids.length > 0){
-    			var str = new Array();
-    			ids.each(function(){
-    				str.push($(this).val());
-    			});
-    			param = str.join(',');
-    		}
+$(function(){
+	//搜索功能
+	$("#search").click(function(){
+		var url = $(this).attr('url');
+        var query  = $('.search-form').find('input').serialize();
+        query = query.replace(/(&|^)(\w*?\d*?\-*?_*?)*?=?((?=&)|(?=$))/g,'');
+        query = query.replace(/^&/g,'');
+        if( url.indexOf('?')>0 ){
+            url += '&' + query;
+        }else{
+            url += '?' + query;
+        }
+		window.location.href = url;
+	});
+	//回车搜索
+	$(".search-input").keyup(function(e){
+		if(e.keyCode === 13){
+			$("#search").click();
+			return false;
+		}
+	});
+	//点击排序
+	$('.list_sort').click(function(){
+		var url = $(this).attr('url');
+		var ids = $('.ids:checked');
+		var param = '';
+		if(ids.length > 0){
+			var str = new Array();
+			ids.each(function(){
+				str.push($(this).val());
+			});
+			param = str.join(',');
+		}
 
-    		if(url != undefined && url != ''){
-    			window.location.href = url + '/ids/' + param;
-    		}
-    	});
-    });
+		if(url != undefined && url != ''){
+			window.location.href = url + '/ids/' + param;
+		}
+	});
+});
 </script>
 
 </body>

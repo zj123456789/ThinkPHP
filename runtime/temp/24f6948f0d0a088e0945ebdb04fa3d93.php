@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:66:"D:\www\tp\public/../application/admin/view/default/deal\index.html";i:1506751649;s:67:"D:\www\tp\public/../application/admin/view/default/public\base.html";i:1496373782;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:67:"D:\www\tp\public/../application/admin/view/default/user\action.html";i:1496373782;s:67:"D:\www\tp\public/../application/admin/view/default/public\base.html";i:1496373782;}*/ ?>
 <!doctype html>
 <html>
 <head>
@@ -100,65 +100,56 @@
             
 
             
+	<!-- 标题栏 -->
 	<div class="main-title">
-		<h2>导航管理</h2>
+		<h2>行为列表</h2>
 	</div>
 
-	<div class="cf">
-		<a class="btn" href="<?php echo url('add','pid='.$pid); ?>">新 增</a>
-		<button class="btn " url="<?php echo url('del?id='.input('ids')); ?>">删除</button>
-		
-		<button class="btn list_sort" url="<?php echo url('sort',array('pid'=>input('get.pid',0)),''); ?>">排序</button>
-	</div>
+    <div>
+        <button class="btn" id="action_add" url="<?php echo url('addaction'); ?>">新 增</button>
+        <button class="btn ajax-post" target-form="ids" url="<?php echo url('setstatus?Model=Action&status=1'); ?>" >启 用</button>
+        <button class="btn ajax-post" target-form="ids" url="<?php echo url('setstatus?Model=Action&status=0'); ?>">禁 用</button>
+        <button class="btn ajax-post confirm" target-form="ids" url="<?php echo url('setStatus?Model=Action&status=-1'); ?>">删 除</button>
+    </div>
+	<!-- 数据列表 -->
+	<div class="data-table">
+<table class="">
+    <thead>
+        <tr>
+		<th class="row-selected row-selected"><input class="check-all" type="checkbox"/></th>
+		<th class="">编号</th>
+		<th class="">标识</th>
+		<th class="">名称</th>
+		<th class="">类型</th>
+		<th class="">规则</th>
+		<th class="">状态</th>
+		<th class="">操作</th>
+		</tr>
+    </thead>
+    <tbody>
+		<?php if(is_array($_list) || $_list instanceof \think\Collection || $_list instanceof \think\Paginator): $i = 0; $__LIST__ = $_list;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo): $mod = ($i % 2 );++$i;?>
+		<tr>
+            <td><input class="ids" type="checkbox" name="ids[]" value="<?php echo $vo['id']; ?>" /></td>
+			<td><?php echo $vo['id']; ?> </td>
+			<td><?php echo $vo['name']; ?></td>
+			<td><a href="<?php echo url('editAction?id='.$vo['id']); ?>"><?php echo $vo['title']; ?></a></td>
+			<td><span><?php echo get_action_type($vo['type']); ?></span></td>
+			<td><?php echo $vo['remark']; ?></td>
+			<td><?php echo $vo['status_text']; ?></td>
+			<td><a href="<?php echo url('User/editAction?id='.$vo['id']); ?>">编辑</a>
+				<a href="<?php echo url('User/setStatus?Model=action&ids='.$vo['id'].'&status='.abs(1-$vo['status'])); ?>" class="ajax-get"><?php echo show_status_op($vo['status']); ?></a>
+				<a href="<?php echo url('User/setStatus?Model=action&status=-1&ids='.$vo['id']); ?>" class="confirm ajax-get">删除</a>
+                </td>
+		</tr>
+		<?php endforeach; endif; else: echo "" ;endif; ?>
+	</tbody>
+    </table>
 
-	<div class="data-table table-striped">
-		<table>
-			<thead>
-				<tr>
-					<th class="row-selected">
-						<input class="checkbox check-all" type="checkbox" >
-					</th>
-					<th>ID</th>
-					<th>报修人</th>
-					<th>报修地址</th>
-					<th>报修电话</th>
-					<th>问题</th>
-					<th>报修时间</th>
-					<th>完成时间</th>
-                    <th>状态</th>
-                    <th>排序</th>
-					<th>操作</th>
-				</tr>
-			</thead>
-			<tbody>
-				<?php if(!(empty($list) || (($list instanceof \think\Collection || $list instanceof \think\Paginator ) && $list->isEmpty()))): if(is_array($list) || $list instanceof \think\Collection || $list instanceof \think\Paginator): $i = 0; $__LIST__ = $list;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$deal): $mod = ($i % 2 );++$i;?>
-					<tr data-id="del?id='.$deal['id']">
-						<td><input class="ids row-selected" type="checkbox" name="ids[]" id="" value="<?php echo $channel['id']; ?>"> </td>
-						<td><?php echo $deal['id']; ?></td>
-						<td><?php echo $deal['username']; ?></td>
-						<td><?php echo $deal['address']; ?></td>
-                        <td><?php echo $deal['tel']; ?></td>
-                        <td><?php echo $deal['problem']; ?></td>
-						<td><?php echo time_format($deal['create_time']); ?></td>
-						<td><?php echo time_format($deal['update_time']); ?></td>
-                        <td><?php echo !empty($deal['status']) && $deal['status']==2?'已修理':'待修理'; ?></td>
-                        <td><?php echo $deal['sort']; ?></td>
-
-						<td>
-							<a title="编辑" href="<?php echo url('edit?id='.$deal['id'].'&pid='.$pid); ?>">编辑</a>
-							<a href="<?php echo url('setStatus?ids='.$deal['id'].'&status='.abs(1-$deal['status'])); ?>" class="ajax-get"><?php echo show_status_op($deal['status']); ?></a>
-							<a class="confirm ajax-get" title="删除" href="<?php echo url('del?id='.$deal['id']); ?>">删除</a>
-						</td>
-					</tr>
-				<?php endforeach; endif; else: echo "" ;endif; else: ?>
-				<td colspan="6" class="text-center"> aOh! 暂时还没有内容! </td>
-				<?php endif; ?>
-			</tbody>
-		</table>
 	</div>
-<div class="page">
-	<?php echo $list->render(); ?>
-</div>
+	<!-- 分页 -->
+	<div class="page"><?php echo $_page; ?></div>
+	<!-- /分页 -->
+
 
         </div>
         <div class="cont-ft">
@@ -257,25 +248,11 @@
     </script>
     
 <script type="text/javascript">
-    $(function() {
-    	//点击排序
-    	$('.list_sort').click(function(){
-    		var url = $(this).attr('url');
-    		var ids = $('.ids:checked');
-    		var param = '';
-    		if(ids.length > 0){
-    			var str = new Array();
-    			ids.each(function(){
-    				str.push($(this).val());
-    			});
-    			param = str.join(',');
-    		}
-
-    		if(url != undefined && url != ''){
-    			window.location.href = url + '/ids/' + param;
-    		}
-    	});
-    });
+$(function(){
+	$("#action_add").click(function(){
+		window.location.href = $(this).attr('url');
+	})
+})
 </script>
 
 </body>

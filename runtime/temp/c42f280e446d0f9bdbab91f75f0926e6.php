@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:66:"D:\www\tp\public/../application/admin/view/default/deal\index.html";i:1506751649;s:67:"D:\www\tp\public/../application/admin/view/default/public\base.html";i:1496373782;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:66:"D:\www\tp\public/../application/admin/view/default/menu\index.html";i:1496373782;s:67:"D:\www\tp\public/../application/admin/view/default/public\base.html";i:1496373782;}*/ ?>
 <!doctype html>
 <html>
 <head>
@@ -100,65 +100,81 @@
             
 
             
-	<div class="main-title">
-		<h2>导航管理</h2>
-	</div>
+    <div class="main-title">
+        <h2><?php if(isset($data)): ?>[ <?php echo $data['title']; ?> ] 子<?php endif; ?>菜单管理 </h2>
+    </div>
 
-	<div class="cf">
-		<a class="btn" href="<?php echo url('add','pid='.$pid); ?>">新 增</a>
-		<button class="btn " url="<?php echo url('del?id='.input('ids')); ?>">删除</button>
-		
-		<button class="btn list_sort" url="<?php echo url('sort',array('pid'=>input('get.pid',0)),''); ?>">排序</button>
-	</div>
+    <div class="cf">
+        <a class="btn" href="<?php echo url('add',array('pid'=>input('get.pid',0))); ?>">新 增</a>
+        <button class="btn ajax-post confirm" url="<?php echo url('del'); ?>" target-form="ids">删 除</button>
+        <a class="btn" href="<?php echo url('import',array('pid'=>input('get.pid',0))); ?>">导 入</a>
+        <button class="btn list_sort" url="<?php echo url('sort',array('pid'=>input('get.pid',0)),''); ?>">排序</button>
+        <!-- 高级搜索 -->
+        <div class="search-form fr cf">
+            <div class="sleft">
+                <input type="text" name="title" class="search-input" value="<?php echo input('title'); ?>" placeholder="请输入菜单名称">
+                <a class="sch-btn" href="javascript:;" id="search" url="<?php echo url('index'); ?>"><i class="btn-search"></i></a>
+            </div>
+        </div>
+    </div>
 
-	<div class="data-table table-striped">
-		<table>
-			<thead>
-				<tr>
-					<th class="row-selected">
-						<input class="checkbox check-all" type="checkbox" >
-					</th>
-					<th>ID</th>
-					<th>报修人</th>
-					<th>报修地址</th>
-					<th>报修电话</th>
-					<th>问题</th>
-					<th>报修时间</th>
-					<th>完成时间</th>
-                    <th>状态</th>
-                    <th>排序</th>
-					<th>操作</th>
-				</tr>
-			</thead>
-			<tbody>
-				<?php if(!(empty($list) || (($list instanceof \think\Collection || $list instanceof \think\Paginator ) && $list->isEmpty()))): if(is_array($list) || $list instanceof \think\Collection || $list instanceof \think\Paginator): $i = 0; $__LIST__ = $list;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$deal): $mod = ($i % 2 );++$i;?>
-					<tr data-id="del?id='.$deal['id']">
-						<td><input class="ids row-selected" type="checkbox" name="ids[]" id="" value="<?php echo $channel['id']; ?>"> </td>
-						<td><?php echo $deal['id']; ?></td>
-						<td><?php echo $deal['username']; ?></td>
-						<td><?php echo $deal['address']; ?></td>
-                        <td><?php echo $deal['tel']; ?></td>
-                        <td><?php echo $deal['problem']; ?></td>
-						<td><?php echo time_format($deal['create_time']); ?></td>
-						<td><?php echo time_format($deal['update_time']); ?></td>
-                        <td><?php echo !empty($deal['status']) && $deal['status']==2?'已修理':'待修理'; ?></td>
-                        <td><?php echo $deal['sort']; ?></td>
-
-						<td>
-							<a title="编辑" href="<?php echo url('edit?id='.$deal['id'].'&pid='.$pid); ?>">编辑</a>
-							<a href="<?php echo url('setStatus?ids='.$deal['id'].'&status='.abs(1-$deal['status'])); ?>" class="ajax-get"><?php echo show_status_op($deal['status']); ?></a>
-							<a class="confirm ajax-get" title="删除" href="<?php echo url('del?id='.$deal['id']); ?>">删除</a>
-						</td>
-					</tr>
-				<?php endforeach; endif; else: echo "" ;endif; else: ?>
-				<td colspan="6" class="text-center"> aOh! 暂时还没有内容! </td>
+    <div class="data-table table-striped">
+        <form class="ids">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="row-selected">
+                            <input class="checkbox check-all" type="checkbox">
+                        </th>
+                        <th>ID</th>
+                        <th>名称</th>
+                        <th>上级菜单</th>
+                        <th>分组</th>
+                        <th>URL</th>
+                        <th>排序</th>
+                        <th>仅开发者模式显示</th>
+                        <th>隐藏</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+				<?php if(!(empty($list) || (($list instanceof \think\Collection || $list instanceof \think\Paginator ) && $list->isEmpty()))): if(is_array($list) || $list instanceof \think\Collection || $list instanceof \think\Paginator): $i = 0; $__LIST__ = $list;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$menu): $mod = ($i % 2 );++$i;?>
+                    <tr>
+                        <td><input class="ids row-selected" type="checkbox" name="id[]" value="<?php echo $menu['id']; ?>"></td>
+                        <td><?php echo $menu['id']; ?></td>
+                        <td>
+                            <a href="<?php echo url('index?pid='.$menu['id']); ?>"><?php echo $menu['title']; ?></a>
+                        </td>
+                        <td><?php echo (isset($menu['up_title']) && ($menu['up_title'] !== '')?$menu['up_title']:'无'); ?></td>
+                        <td><?php echo $menu['group']; ?></td>
+                        <td><?php echo $menu['url']; ?></td>
+                        <td><?php echo $menu['sort']; ?></td>
+                        <td>
+                            <a href="<?php echo url('toogleDev',array('id'=>$menu['id'],'value'=>abs($menu['is_dev']-1))); ?>" class="ajax-get">
+                            <?php echo $menu['is_dev_text']; ?>
+                            </a>
+                        </td>
+                        <td>
+                            <a href="<?php echo url('toogleHide',array('id'=>$menu['id'],'value'=>abs($menu['hide']-1))); ?>" class="ajax-get">
+                            <?php echo $menu['hide_text']; ?>
+                            </a>
+                        </td>
+                        <td>
+                            <a title="编辑" href="<?php echo url('edit?id='.$menu['id']); ?>">编辑</a>
+                            <a class="confirm ajax-get" title="删除" href="<?php echo url('del?id='.$menu['id']); ?>">删除</a>
+                        </td>
+                    </tr>
+                <?php endforeach; endif; else: echo "" ;endif; else: ?>
+				<td colspan="10" class="text-center"> aOh! 暂时还没有内容! </td>
 				<?php endif; ?>
-			</tbody>
-		</table>
-	</div>
-<div class="page">
-	<?php echo $list->render(); ?>
-</div>
+                </tbody>
+            </table>
+        </form>
+        <!-- 分页 -->
+        <div class="page">
+            
+        </div>
+    </div>
 
         </div>
         <div class="cont-ft">
@@ -256,27 +272,49 @@
         }
     </script>
     
-<script type="text/javascript">
-    $(function() {
-    	//点击排序
-    	$('.list_sort').click(function(){
-    		var url = $(this).attr('url');
-    		var ids = $('.ids:checked');
-    		var param = '';
-    		if(ids.length > 0){
-    			var str = new Array();
-    			ids.each(function(){
-    				str.push($(this).val());
-    			});
-    			param = str.join(',');
-    		}
+    <script type="text/javascript">
+        $(function() {
+            //搜索功能
+            $("#search").click(function() {
+                var url = $(this).attr('url');
+                var query = $('.search-form').find('input').serialize();
+                query = query.replace(/(&|^)(\w*?\d*?\-*?_*?)*?=?((?=&)|(?=$))/g, '');
+                query = query.replace(/^&/g, '');
+                if (url.indexOf('?') > 0) {
+                    url += '&' + query;
+                } else {
+                    url += '?' + query;
+                }
+                window.location.href = url;
+            });
+            //回车搜索
+            $(".search-input").keyup(function(e) {
+                if (e.keyCode === 13) {
+                    $("#search").click();
+                    return false;
+                }
+            });
+            //导航高亮
+            highlight_subnav('<?php echo url('index'); ?>');
+            //点击排序
+        	$('.list_sort').click(function(){
+        		var url = $(this).attr('url');
+        		var ids = $('.ids:checked');
+        		var param = '';
+        		if(ids.length > 0){
+        			var str = new Array();
+        			ids.each(function(){
+        				str.push($(this).val());
+        			});
+        			param = str.join(',');
+        		}
 
-    		if(url != undefined && url != ''){
-    			window.location.href = url + '/ids/' + param;
-    		}
-    	});
-    });
-</script>
+        		if(url != undefined && url != ''){
+        			window.location.href = url + '/ids/' + param;
+        		}
+        	});
+        });
+    </script>
 
 </body>
 </html>

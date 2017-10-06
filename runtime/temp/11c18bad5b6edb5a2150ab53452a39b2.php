@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:1:{s:66:"D:\www\tp\public/../application/home/view/default/index\index.html";i:1506674259;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:1:{s:66:"D:\www\tp\public/../application/home/view/default/index\index.html";i:1507295970;}*/ ?>
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -52,7 +52,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-xs-4">
-                    <a href="notice.html">
+                    <a href="/home/notice/index.html">
                     <div class="indexLabel label-danger">
                     <span class="glyphicon glyphicon-bullhorn"></span><br/>
                     小区通知
@@ -60,7 +60,7 @@
                     </a>
                 </div>
                 <div class="col-xs-4">
-                    <a href="service.html">
+                    <a href="/home/service/index.html">
                     <div class="indexLabel label-warning">
                     <span class="glyphicon glyphicon-ok-circle"></span><br/>
                     便民服务
@@ -68,7 +68,7 @@
                     </a>
                 </div>
                 <div class="col-xs-4">
-                    <a href="online.html">
+                    <a href="/home/deal/add.html">
                     <div class="indexLabel label-info">
                     <span class="glyphicon glyphicon-heart-empty"></span><br/>
                     在线报修
@@ -76,7 +76,7 @@
                     </a>
                 </div>
                 <div class="col-xs-4">
-                    <a href="notice.html">
+                    <a href="/home/market/index.html">
                     <div class="indexLabel label-success">
                     <span class="glyphicon glyphicon-briefcase"></span><br/>
                     商家活动
@@ -84,7 +84,7 @@
                     </a>
                 </div>
                 <div class="col-xs-4">
-                    <a href="zushou.html">
+                    <a href="/home/rental/index.html">
                     <div class="indexLabel label-primary">
                     <span class="glyphicon glyphicon-usd"></span><br/>
                     小区租售
@@ -92,7 +92,7 @@
                     </a>
                 </div>
                 <div class="col-xs-4">
-                    <a href="notice.html">
+                    <a href="/home/activity/index.html">
                     <div class="indexLabel label-default">
                         <span class="glyphicon glyphicon-apple"></span><br/>
                         小区活动

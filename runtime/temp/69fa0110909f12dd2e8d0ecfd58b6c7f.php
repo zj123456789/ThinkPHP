@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:66:"D:\www\tp\public/../application/admin/view/default/deal\index.html";i:1506751649;s:67:"D:\www\tp\public/../application/admin/view/default/public\base.html";i:1496373782;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:66:"D:\www\tp\public/../application/admin/view/default/user\index.html";i:1496373782;s:67:"D:\www\tp\public/../application/admin/view/default/public\base.html";i:1496373782;}*/ ?>
 <!doctype html>
 <html>
 <head>
@@ -100,65 +100,71 @@
             
 
             
+	<!-- 标题栏 -->
 	<div class="main-title">
-		<h2>导航管理</h2>
+		<h2>用户列表</h2>
 	</div>
-
 	<div class="cf">
-		<a class="btn" href="<?php echo url('add','pid='.$pid); ?>">新 增</a>
-		<button class="btn " url="<?php echo url('del?id='.input('ids')); ?>">删除</button>
-		
-		<button class="btn list_sort" url="<?php echo url('sort',array('pid'=>input('get.pid',0)),''); ?>">排序</button>
-	</div>
+		<div class="fl">
+            <a class="btn" href="<?php echo url('add'); ?>">新 增</a>
+            <button class="btn ajax-post" url="<?php echo url('changeStatus?method=resumeUser'); ?>" target-form="ids">启 用</button>
+            <button class="btn ajax-post" url="<?php echo url('changeStatus?method=forbidUser'); ?>" target-form="ids">禁 用</button>
+            <button class="btn ajax-post confirm" url="<?php echo url('changeStatus?method=deleteUser'); ?>" target-form="ids">删 除</button>
+        </div>
 
-	<div class="data-table table-striped">
-		<table>
-			<thead>
-				<tr>
-					<th class="row-selected">
-						<input class="checkbox check-all" type="checkbox" >
-					</th>
-					<th>ID</th>
-					<th>报修人</th>
-					<th>报修地址</th>
-					<th>报修电话</th>
-					<th>问题</th>
-					<th>报修时间</th>
-					<th>完成时间</th>
-                    <th>状态</th>
-                    <th>排序</th>
-					<th>操作</th>
-				</tr>
-			</thead>
-			<tbody>
-				<?php if(!(empty($list) || (($list instanceof \think\Collection || $list instanceof \think\Paginator ) && $list->isEmpty()))): if(is_array($list) || $list instanceof \think\Collection || $list instanceof \think\Paginator): $i = 0; $__LIST__ = $list;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$deal): $mod = ($i % 2 );++$i;?>
-					<tr data-id="del?id='.$deal['id']">
-						<td><input class="ids row-selected" type="checkbox" name="ids[]" id="" value="<?php echo $channel['id']; ?>"> </td>
-						<td><?php echo $deal['id']; ?></td>
-						<td><?php echo $deal['username']; ?></td>
-						<td><?php echo $deal['address']; ?></td>
-                        <td><?php echo $deal['tel']; ?></td>
-                        <td><?php echo $deal['problem']; ?></td>
-						<td><?php echo time_format($deal['create_time']); ?></td>
-						<td><?php echo time_format($deal['update_time']); ?></td>
-                        <td><?php echo !empty($deal['status']) && $deal['status']==2?'已修理':'待修理'; ?></td>
-                        <td><?php echo $deal['sort']; ?></td>
-
-						<td>
-							<a title="编辑" href="<?php echo url('edit?id='.$deal['id'].'&pid='.$pid); ?>">编辑</a>
-							<a href="<?php echo url('setStatus?ids='.$deal['id'].'&status='.abs(1-$deal['status'])); ?>" class="ajax-get"><?php echo show_status_op($deal['status']); ?></a>
-							<a class="confirm ajax-get" title="删除" href="<?php echo url('del?id='.$deal['id']); ?>">删除</a>
-						</td>
-					</tr>
-				<?php endforeach; endif; else: echo "" ;endif; else: ?>
-				<td colspan="6" class="text-center"> aOh! 暂时还没有内容! </td>
+        <!-- 高级搜索 -->
+		<div class="search-form fr cf">
+			<div class="sleft">
+				<input type="text" name="nickname" class="search-input" value="<?php echo input('nickname'); ?>" placeholder="请输入用户昵称或者ID">
+				<a class="sch-btn" href="javascript:;" id="search" url="<?php echo url('index'); ?>"><i class="btn-search"></i></a>
+			</div>
+		</div>
+    </div>
+    <!-- 数据列表 -->
+    <div class="data-table table-striped">
+	<table class="">
+    <thead>
+        <tr>
+		<th class="row-selected row-selected"><input class="check-all" type="checkbox"/></th>
+		<th class="">UID</th>
+		<th class="">昵称</th>
+		<th class="">积分</th>
+		<th class="">登录次数</th>
+		<th class="">最后登录时间</th>
+		<th class="">最后登录IP</th>
+		<th class="">状态</th>
+		<th class="">操作</th>
+		</tr>
+    </thead>
+    <tbody>
+		<?php if(!(empty($_list) || (($_list instanceof \think\Collection || $_list instanceof \think\Paginator ) && $_list->isEmpty()))): if(is_array($_list) || $_list instanceof \think\Collection || $_list instanceof \think\Paginator): $i = 0; $__LIST__ = $_list;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo): $mod = ($i % 2 );++$i;?>
+		<tr>
+            <td><input class="ids" type="checkbox" name="id[]" value="<?php echo $vo['uid']; ?>" /></td>
+			<td><?php echo $vo['uid']; ?> </td>
+			<td><?php echo $vo['nickname']; ?></td>
+			<td><?php echo $vo['score']; ?></td>
+			<td><?php echo $vo['login']; ?></td>
+			<td><span><?php echo time_format($vo['last_login_time']); ?></span></td>
+			<td><span><?php echo long2ip($vo['last_login_ip']); ?></span></td>
+			<td><?php echo $vo['status_text']; ?></td>
+			<td><?php if($vo['status'] == '1'): ?>
+				<a href="<?php echo url('User/changeStatus?method=forbidUser&id='.$vo['uid']); ?>" class="ajax-get">禁用</a>
+				<?php else: ?>
+				<a href="<?php echo url('User/changeStatus?method=resumeUser&id='.$vo['uid']); ?>" class="ajax-get">启用</a>
 				<?php endif; ?>
-			</tbody>
-		</table>
+				<a href="<?php echo url('AuthManager/group?uid='.$vo['uid']); ?>" class="authorize">授权</a>
+                <a href="<?php echo url('User/changeStatus?method=deleteUser&id='.$vo['uid']); ?>" class="confirm ajax-get">删除</a>
+                </td>
+		</tr>
+		<?php endforeach; endif; else: echo "" ;endif; else: ?>
+		<td colspan="9" class="text-center"> aOh! 暂时还没有内容! </td>
+		<?php endif; ?>
+	</tbody>
+    </table>
 	</div>
-<div class="page">
-	<?php echo $list->render(); ?>
-</div>
+    <div class="page">
+        <?php echo $_page; ?>
+    </div>
 
         </div>
         <div class="cont-ft">
@@ -256,27 +262,32 @@
         }
     </script>
     
-<script type="text/javascript">
-    $(function() {
-    	//点击排序
-    	$('.list_sort').click(function(){
-    		var url = $(this).attr('url');
-    		var ids = $('.ids:checked');
-    		var param = '';
-    		if(ids.length > 0){
-    			var str = new Array();
-    			ids.each(function(){
-    				str.push($(this).val());
-    			});
-    			param = str.join(',');
-    		}
+	<script src="__PUBLIC__/static/thinkbox/jquery.thinkbox.js"></script>
 
-    		if(url != undefined && url != ''){
-    			window.location.href = url + '/ids/' + param;
-    		}
-    	});
-    });
-</script>
+	<script type="text/javascript">
+	//搜索功能
+	$("#search").click(function(){
+		var url = $(this).attr('url');
+        var query  = $('.search-form').find('input').serialize();
+        query = query.replace(/(&|^)(\w*?\d*?\-*?_*?)*?=?((?=&)|(?=$))/g,'');
+        query = query.replace(/^&/g,'');
+        if( url.indexOf('?')>0 ){
+            url += '&' + query;
+        }else{
+            url += '?' + query;
+        }
+		window.location.href = url;
+	});
+	//回车搜索
+	$(".search-input").keyup(function(e){
+		if(e.keyCode === 13){
+			$("#search").click();
+			return false;
+		}
+	});
+    //导航高亮
+    highlight_subnav('<?php echo url('User/index'); ?>');
+	</script>
 
 </body>
 </html>

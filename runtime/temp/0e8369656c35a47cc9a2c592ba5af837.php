@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:66:"D:\www\tp\public/../application/admin/view/default/deal\index.html";i:1506751649;s:67:"D:\www\tp\public/../application/admin/view/default/public\base.html";i:1496373782;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:66:"D:\www\tp\public/../application/admin/view/default/sale\index.html";i:1507023479;s:67:"D:\www\tp\public/../application/admin/view/default/public\base.html";i:1496373782;}*/ ?>
 <!doctype html>
 <html>
 <head>
@@ -100,64 +100,54 @@
             
 
             
-	<div class="main-title">
-		<h2>导航管理</h2>
-	</div>
+<div class="main-title">
+    <h2>导航管理</h2>
+</div>
 
-	<div class="cf">
-		<a class="btn" href="<?php echo url('add','pid='.$pid); ?>">新 增</a>
-		<button class="btn " url="<?php echo url('del?id='.input('ids')); ?>">删除</button>
-		
-		<button class="btn list_sort" url="<?php echo url('sort',array('pid'=>input('get.pid',0)),''); ?>">排序</button>
-	</div>
+<div class="cf">
+    <a class="btn" href="<?php echo url('add','pid='.$pid); ?>">新 增</a>
+    <a class="btn" href="javascript:;">删 除</a>
+    <button class="btn list_sort" url="<?php echo url('sort',array('pid'=>input('get.pid',0)),''); ?>">排序</button>
+</div>
 
-	<div class="data-table table-striped">
-		<table>
-			<thead>
-				<tr>
-					<th class="row-selected">
-						<input class="checkbox check-all" type="checkbox" >
-					</th>
-					<th>ID</th>
-					<th>报修人</th>
-					<th>报修地址</th>
-					<th>报修电话</th>
-					<th>问题</th>
-					<th>报修时间</th>
-					<th>完成时间</th>
-                    <th>状态</th>
-                    <th>排序</th>
-					<th>操作</th>
-				</tr>
-			</thead>
-			<tbody>
-				<?php if(!(empty($list) || (($list instanceof \think\Collection || $list instanceof \think\Paginator ) && $list->isEmpty()))): if(is_array($list) || $list instanceof \think\Collection || $list instanceof \think\Paginator): $i = 0; $__LIST__ = $list;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$deal): $mod = ($i % 2 );++$i;?>
-					<tr data-id="del?id='.$deal['id']">
-						<td><input class="ids row-selected" type="checkbox" name="ids[]" id="" value="<?php echo $channel['id']; ?>"> </td>
-						<td><?php echo $deal['id']; ?></td>
-						<td><?php echo $deal['username']; ?></td>
-						<td><?php echo $deal['address']; ?></td>
-                        <td><?php echo $deal['tel']; ?></td>
-                        <td><?php echo $deal['problem']; ?></td>
-						<td><?php echo time_format($deal['create_time']); ?></td>
-						<td><?php echo time_format($deal['update_time']); ?></td>
-                        <td><?php echo !empty($deal['status']) && $deal['status']==2?'已修理':'待修理'; ?></td>
-                        <td><?php echo $deal['sort']; ?></td>
-
-						<td>
-							<a title="编辑" href="<?php echo url('edit?id='.$deal['id'].'&pid='.$pid); ?>">编辑</a>
-							<a href="<?php echo url('setStatus?ids='.$deal['id'].'&status='.abs(1-$deal['status'])); ?>" class="ajax-get"><?php echo show_status_op($deal['status']); ?></a>
-							<a class="confirm ajax-get" title="删除" href="<?php echo url('del?id='.$deal['id']); ?>">删除</a>
-						</td>
-					</tr>
-				<?php endforeach; endif; else: echo "" ;endif; else: ?>
-				<td colspan="6" class="text-center"> aOh! 暂时还没有内容! </td>
-				<?php endif; ?>
-			</tbody>
-		</table>
-	</div>
-<div class="page">
-	<?php echo $list->render(); ?>
+<div class="data-table table-striped">
+    <table>
+        <thead>
+        <tr>
+            <th class="row-selected">
+                <input class="checkbox check-all" type="checkbox">
+            </th>
+            <th>发布人</th>
+            <th>电话</th>
+            <th>标题</th>
+            <th>类型</th>
+            <th>价格</th>
+            <th>发布时间</th>
+            <th>截止时间</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php if(!(empty($list) || (($list instanceof \think\Collection || $list instanceof \think\Paginator ) && $list->isEmpty()))): if(is_array($list) || $list instanceof \think\Collection || $list instanceof \think\Paginator): $i = 0; $__LIST__ = $list;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$rental): $mod = ($i % 2 );++$i;?>
+        <tr>
+            <td><input class="ids row-selected" type="checkbox" name="" id="" value="<?php echo $repair['id']; ?>"> </td>
+            <td><?php echo $rental['name']; ?></td>
+            <td><?php echo $rental['tel']; ?></a></td>
+            <td><?php echo $rental['title']; ?></td>
+            <td><?php echo !empty($rental['type']) && $rental['type']==1?'出租':'出售'; ?></td>
+            <td><?php echo $rental['price']; ?><?php echo !empty($rental['company']) && $rental['company']==1?'元/月':'万元'; ?></td>
+            <td><?php echo date("Y-m-d H:i:s",$rental['create_time']); ?></td>
+            <td><?php echo date("Y-m-d H:i:s",$rental['end_time']); ?></td>
+            <td>
+                <a title="编辑" href="<?php echo url('edit?id='.$rental['id'].'&pid='.$pid); ?>">编辑</a>
+                <a class="confirm ajax-get" title="删除" href="<?php echo url('del?id='.$rental['id']); ?>">删除</a>
+            </td>
+        </tr>
+        <?php endforeach; endif; else: echo "" ;endif; else: ?>
+        <td colspan="6" class="text-center"> aOh! 暂时还没有内容! </td>
+        <?php endif; ?>
+        </tbody>
+    </table>
 </div>
 
         </div>
@@ -258,23 +248,23 @@
     
 <script type="text/javascript">
     $(function() {
-    	//点击排序
-    	$('.list_sort').click(function(){
-    		var url = $(this).attr('url');
-    		var ids = $('.ids:checked');
-    		var param = '';
-    		if(ids.length > 0){
-    			var str = new Array();
-    			ids.each(function(){
-    				str.push($(this).val());
-    			});
-    			param = str.join(',');
-    		}
+        //点击排序
+        $('.list_sort').click(function(){
+            var url = $(this).attr('url');
+            var ids = $('.ids:checked');
+            var param = '';
+            if(ids.length > 0){
+                var str = new Array();
+                ids.each(function(){
+                    str.push($(this).val());
+                });
+                param = str.join(',');
+            }
 
-    		if(url != undefined && url != ''){
-    			window.location.href = url + '/ids/' + param;
-    		}
-    	});
+            if(url != undefined && url != ''){
+                window.location.href = url + '/ids/' + param;
+            }
+        });
     });
 </script>
 

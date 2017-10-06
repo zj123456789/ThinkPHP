@@ -113,7 +113,6 @@ class Channel extends Admin {
         if ( empty($id) ) {
             $this->error('请选择要操作的数据!');
         }
-
         $map = array('id' => array('in', $id) );
         if(\think\Db::name('channel')->where($map)->delete()){
             //记录行为
