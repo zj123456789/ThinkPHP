@@ -33,7 +33,6 @@ class Activity extends Admin{
                 return $this->error($activity->getError());
             }
             //保存到数据库
-            //var_dump(111);exit;
             $data['create_time']=time();
             $data=$activity->insert($data);
             //判断是否添加成功

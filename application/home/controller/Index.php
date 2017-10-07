@@ -27,5 +27,19 @@ class Index extends Home{
 
         return $this->fetch('index');
     }
+    //服务
+    public function Fuwu(){
 
+        return $this->fetch('fuwu');
+    }
+
+    //发现
+    public function Faxian(){
+        return $this->fetch('faxian');
+    }
+
+    //我的
+    public function My(){
+        return $this->fetch('my');
+    }
 }

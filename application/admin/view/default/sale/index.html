@@ -30,19 +30,19 @@
         </thead>
         <tbody>
         {notempty name="list"}
-        {volist name="list" id="rental"}
+        {volist name="list" id="sale"}
         <tr>
             <td><input class="ids row-selected" type="checkbox" name="" id="" value="{$repair['id']}"> </td>
-            <td>{$rental.name}</td>
-            <td>{$rental.tel}</a></td>
-            <td>{$rental.title}</td>
-            <td>{$rental.type==1?'出租':'出售'}</td>
-            <td>{$rental.price}{$rental.company==1?'元/月':'万元'}</td>
-            <td>{$rental.create_time|date="Y-m-d H:i:s",###}</td>
-            <td>{$rental.end_time|date="Y-m-d H:i:s",###}</td>
+            <td>{$sale.name}</td>
+            <td>{$sale.tel}</a></td>
+            <td>{$sale.title}</td>
+            <td>{$sale.type==1?'出租':'出售'}</td>
+            <td>{$sale.price}{$rental.company==1?'元/月':'万元'}</td>
+            <td>{$sale.create_time|date="Y-m-d H:i:s",###}</td>
+            <td>{$sale.end_time|date="Y-m-d H:i:s",###}</td>
             <td>
-                <a title="编辑" href="{:url('edit?id='.$rental['id'].'&pid='.$pid)}">编辑</a>
-                <a class="confirm ajax-get" title="删除" href="{:url('del?id='.$rental['id'])}">删除</a>
+                <a title="编辑" href="{:url('edit?id='.$sale['id'].'&pid='.$pid)}">编辑</a>
+                <a class="confirm ajax-get" title="删除" href="{:url('del?id='.$sale['id'])}">删除</a>
             </td>
         </tr>
         {/volist}
