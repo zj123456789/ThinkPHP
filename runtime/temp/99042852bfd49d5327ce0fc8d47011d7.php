@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:1:{s:67:"D:\www\tp\public/../application/home/view/default/market\index.html";i:1507296597;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:1:{s:67:"D:\www\tp\public/../application/home/view/default/market\index.html";i:1507466443;}*/ ?>
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -44,28 +44,27 @@
     </nav>
     <!--导航结束-->
 
-    <div class="container-fluid">
+    <div class="container-fluid" id="content">
         <!--{notempty name="list"}-->
-        <?php if(is_array($list) || $list instanceof \think\Collection || $list instanceof \think\Paginator): $i = 0; $__LIST__ = $list;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$market): $mod = ($i % 2 );++$i;?>
-        <div class="row noticeList">
-            <a href="<?php echo url('details?id='.$market['id']); ?>">
-                <div class="col-xs-2">
-                    <img class="noticeImg" src="/image/1.png" />
-                </div>
-                <div class="col-xs-10">
-                    <p class="title"><?php echo $market['title']; ?></p>
-                    <p class="intro"><?php echo $market['description']; ?></p>
-                    <p class="info">浏览量:<?php echo $market['view']; ?> <span class="pull-right"><?php echo date("Y-m-d H:i:s",$market['create_time']); ?></span> </p>
-                </div>
-            </a>
-        </div>
-        <?php endforeach; endif; else: echo "" ;endif; ?>
+
 
     </div>
 </div>
+
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="/jquery-1.11.2.min.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="/bootstrap/js/bootstrap.min.js"></script>
 </body>
+
+<script type="text/javascript">
+    var load = function (no) {
+        $('.load').remove();
+        $.get("<?php echo url('Market/ajax'); ?>",{'page':no},function (data) {
+            $('#content').append(data);
+        });
+    };
+    load(1);
+</script>
+
 </html>

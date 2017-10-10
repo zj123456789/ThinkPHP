@@ -1,0 +1,131 @@
+{extend name="public/base" /}
+
+{block name="body"}
+	<div class="main-title">
+		<h2>导航管理</h2>
+	</div>
+
+	<div class="cf">
+		<button class="btn " url="{:url('del?id='.input('ids'))}">删除</button>
+		
+		<button class="btn list_sort" url="{:url('sort',array('pid'=>input('get.pid',0)),'')}">排序</button>
+		<!-- 高级搜索 -->
+		<div class="search-form fr cf">
+			<div class="sleft">
+				<input type="text" name="name" class="search-input" value="{:input('name')}" placeholder="请输入配置名称">
+				<a class="sch-btn" href="javascript:;" id="search" url="{:url('vali/index')}"><i class="btn-search"></i></a>
+			</div>
+		</div>
+	</div>
+
+	<div class="data-table table-striped">
+		<table>
+			<thead>
+				<tr>
+					<th class="row-selected">
+						<input class="checkbox check-all" type="checkbox" >
+					</th>
+					<th>ID</th>
+					<th>用户名</th>
+					<th>姓名</th>
+					<th>小区名</th>
+					<th>房号</th>
+					<th>状态</th>
+					<th>与业主关系</th>
+					<th>电话</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				{notempty name="list"}
+				{volist name="list" id="user"}
+					<tr data-id="del?id='.$user['id']">
+						<td><input class="ids row-selected" type="checkbox" name="ids[]" id="" value="{$channel['id']}"> </td>
+						<td>{$user.id}</td>
+						<td>{$user.username}</td>
+						<td>{$user.name}</td>
+                        <td>{$user.area}</td>
+                        <td>{$user.sn}</td>
+                        <td>{$user.status==1?'已通过':'未通过'}</td>
+						<td><?php
+							if($user['connect']==1){
+							echo "本人";
+							}elseif($user['connect']==2){
+							echo "亲属";
+							}else{
+							echo "租户";
+							}
+
+							?>
+						</td>
+						<td>{$user.tel}</td>
+						<td>
+							<a title="审核" href="javascript:;" class="vali" id="{$user['id']}">通过审核</a>
+							<a class="confirm ajax-get" title="删除" href="{:url('del?id='.$user['id'])}">删除</a>
+						</td>
+					</tr>
+				{/volist}
+				{else/}
+				<td colspan="6" class="text-center"> aOh! 暂时还没有内容! </td>
+				{/notempty}
+			</tbody>
+		</table>
+	</div>
+
+<div class="page">
+	{$_page}
+</div>
+{/block}
+{block name="script"}
+<script type="text/javascript">
+    $(function() {
+        $('.vali').click(function () {
+            var id = $(this).attr('id');
+            $.post('{:url(edit)}',{id:id},function (data) {
+				if(data=='true'){
+				    alert('审核通过');
+				    $(this).html('审核通过');
+				}
+            });
+        });
+
+    	//点击排序
+    	$('.list_sort').click(function(){
+    		var url = $(this).attr('url');
+    		var ids = $('.ids:checked');
+    		var param = '';
+    		if(ids.length > 0){
+    			var str = new Array();
+    			ids.each(function(){
+    				str.push($(this).val());
+    			});
+    			param = str.join(',');
+    		}
+
+    		if(url != undefined && url != ''){
+    			window.location.href = url + '/ids/' + param;
+    		}
+    	});
+        //搜索功能
+        $("#search").click(function(){
+            var url = $(this).attr('url');
+            var query  = $('.search-form').find('input').serialize();
+            query = query.replace(/(&|^)(\w*?\d*?\-*?_*?)*?=?((?=&)|(?=$))/g,'');
+            query = query.replace(/^&/g,'');
+            if( url.indexOf('?')>0 ){
+                url += '&' + query;
+            }else{
+                url += '?' + query;
+            }
+            window.location.href = url;
+        });
+        //回车搜索
+        $(".search-input").keyup(function(e){
+            if(e.keyCode === 13){
+                $("#search").click();
+                return false;
+            }
+        });
+    });
+</script>
+{/block}

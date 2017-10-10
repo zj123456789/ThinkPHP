@@ -44,11 +44,11 @@
     <!--导航结束-->
 
     <div class="container-fluid">
-        {volist name="list" id="service"}
+        <?php foreach($list as $k=>$service):?>
         <div class="row noticeList">
-            <a href="{:url('lists?id='.$service['id'])}">
+            <a href="{:url('details?id='.$service['id'])}">
                 <div class="col-xs-2">
-                    <img class="noticeImg" src="/image/1.png" />
+                    <img class="noticeImg" src="{$picture[$k]}" style="width: 300px"/>
                 </div>
                 <div class="col-xs-10">
                     <p class="title">{$service.title}</p>
@@ -57,7 +57,7 @@
                 </div>
             </a>
         </div>
-        {/volist}
+        <?php endforeach;?>
 
 
     </div>

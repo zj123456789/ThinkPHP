@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:1:{s:67:"D:\www\tp\public/../application/home/view/default/market\lists.html";i:1507296627;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:1:{s:67:"D:\www\tp\public/../application/home/view/default/market\lists.html";i:1507430588;}*/ ?>
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -52,7 +52,7 @@
         <div class="noticeDetailContent">
            <?php echo $list['content']; ?>
         </div>
-        <img class="noticeImg" src="/image/1.png" />
+        <img class="noticeImg" src="<?php echo $picture['path']; ?>" />
     </div>
 </div>
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->

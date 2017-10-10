@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:66:"D:\www\tp\public/../application/admin/view/default/deal\index.html";i:1506751649;s:67:"D:\www\tp\public/../application/admin/view/default/public\base.html";i:1496373782;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:66:"D:\www\tp\public/../application/admin/view/default/deal\index.html";i:1507358951;s:67:"D:\www\tp\public/../application/admin/view/default/public\base.html";i:1496373782;}*/ ?>
 <!doctype html>
 <html>
 <head>
@@ -109,6 +109,13 @@
 		<button class="btn " url="<?php echo url('del?id='.input('ids')); ?>">删除</button>
 		
 		<button class="btn list_sort" url="<?php echo url('sort',array('pid'=>input('get.pid',0)),''); ?>">排序</button>
+		<!-- 高级搜索 -->
+		<div class="search-form fr cf">
+			<div class="sleft">
+				<input type="text" name="name" class="search-input" value="<?php echo input('name'); ?>" placeholder="请输入配置名称">
+				<a class="sch-btn" href="javascript:;" id="search" url="<?php echo url('deal/index'); ?>"><i class="btn-search"></i></a>
+			</div>
+		</div>
 	</div>
 
 	<div class="data-table table-striped">
@@ -156,8 +163,9 @@
 			</tbody>
 		</table>
 	</div>
+
 <div class="page">
-	<?php echo $list->render(); ?>
+	<?php echo $_page; ?>
 </div>
 
         </div>
@@ -275,6 +283,26 @@
     			window.location.href = url + '/ids/' + param;
     		}
     	});
+        //搜索功能
+        $("#search").click(function(){
+            var url = $(this).attr('url');
+            var query  = $('.search-form').find('input').serialize();
+            query = query.replace(/(&|^)(\w*?\d*?\-*?_*?)*?=?((?=&)|(?=$))/g,'');
+            query = query.replace(/^&/g,'');
+            if( url.indexOf('?')>0 ){
+                url += '&' + query;
+            }else{
+                url += '?' + query;
+            }
+            window.location.href = url;
+        });
+        //回车搜索
+        $(".search-input").keyup(function(e){
+            if(e.keyCode === 13){
+                $("#search").click();
+                return false;
+            }
+        });
     });
 </script>
 

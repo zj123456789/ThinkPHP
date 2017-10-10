@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:1:{s:69:"D:\www\tp\public/../application/home/view/default/activity\lists.html";i:1507126332;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:1:{s:69:"D:\www\tp\public/../application/home/view/default/activity\lists.html";i:1507363312;}*/ ?>
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -50,9 +50,9 @@
         <div class="noticeDetailInfo">发布者:<?php echo $list['name']; ?></div>
         <div class="noticeDetailInfo">发布时间：<?php echo date("Y-m-d H:i:s",$list['create_time']); ?></div>
         <div class="noticeDetailContent">
-           <?php echo $list['content']; ?>
+           <?php echo $detail['content']; ?>
         </div>
-        <img class="noticeImg" src="/home/image/1.png" />
+        <img class="noticeImg" src="<?php echo $picture['path']; ?>" />
     </div>
 </div>
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->

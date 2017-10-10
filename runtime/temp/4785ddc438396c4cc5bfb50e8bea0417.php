@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:1:{s:68:"D:\www\tp\public/../application/home/view/default/service\index.html";i:1507296977;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:1:{s:68:"D:\www\tp\public/../application/home/view/default/service\index.html";i:1507431683;}*/ ?>
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -45,11 +45,11 @@
     <!--导航结束-->
 
     <div class="container-fluid">
-        <?php if(is_array($list) || $list instanceof \think\Collection || $list instanceof \think\Paginator): $i = 0; $__LIST__ = $list;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$service): $mod = ($i % 2 );++$i;?>
+        <?php foreach($list as $k=>$service):?>
         <div class="row noticeList">
-            <a href="<?php echo url('lists?id='.$service['id']); ?>">
+            <a href="<?php echo url('details?id='.$service['id']); ?>">
                 <div class="col-xs-2">
-                    <img class="noticeImg" src="/image/1.png" />
+                    <img class="noticeImg" src="<?php echo $picture[$k]; ?>" style="width: 300px"/>
                 </div>
                 <div class="col-xs-10">
                     <p class="title"><?php echo $service['title']; ?></p>
@@ -58,7 +58,7 @@
                 </div>
             </a>
         </div>
-        <?php endforeach; endif; else: echo "" ;endif; ?>
+        <?php endforeach;?>
 
 
     </div>

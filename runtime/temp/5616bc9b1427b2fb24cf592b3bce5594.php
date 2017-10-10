@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:1:{s:65:"D:\www\tp\public/../application/home/view/default/life\index.html";i:1507296766;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:1:{s:65:"D:\www\tp\public/../application/home/view/default/life\index.html";i:1507430797;}*/ ?>
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -46,11 +46,11 @@
 
     <div class="container-fluid">
         <!--{notempty name="list"}-->
-        <?php if(is_array($list) || $list instanceof \think\Collection || $list instanceof \think\Paginator): $i = 0; $__LIST__ = $list;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$life): $mod = ($i % 2 );++$i;?>
+        <?php foreach($list as $k=>$life):?>
         <div class="row noticeList">
             <a href="<?php echo url('details?id='.$life['id']); ?>">
                 <div class="col-xs-2">
-                    <img class="noticeImg" src="../image/1.png" />
+                    <img class="noticeImg" src="<?php echo $picture[$k]; ?>" style="width: 300px"/>
                 </div>
                 <div class="col-xs-10">
                     <p class="title"><?php echo $life['title']; ?></p>
@@ -61,7 +61,7 @@
 
             </a>
         </div>
-        <?php endforeach; endif; else: echo "" ;endif; ?>
+        <?php endforeach;?>
 
     </div>
 </div>

@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:1:{s:63:"D:\www\tp\public/../application/home/view/default/index\my.html";i:1507333747;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:1:{s:63:"D:\www\tp\public/../application/home/view/default/index\my.html";i:1507442676;}*/ ?>
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -65,9 +65,10 @@
         <div class="blank"></div>
         <div>
             <ul class="list-group fuwuList">
-                <li class="list-group-item"><a href="diaochawenjuan.html" class="text-danger"><span class="iconfont">&#xe60a;</span>我的缴费账单</a> </li>
-                <li class="list-group-item"><a href="yezhurenzheng.html" class="text-info"><span class="iconfont">&#xe608;</span>我的物业通知</a></li>
-                <li class="list-group-item"><a href="yezhurenzheng.html" class="text-info"><span class="iconfont">&#xe607;</span>我的水电气使用</a></li>
+                <li class="list-group-item"><a href="" class="text-danger"><span class="iconfont">&#xe60a;</span>我的缴费账单</a> </li>
+                <li class="list-group-item"><a href="" class="text-info"><span class="iconfont">&#xe608;</span>我的物业通知</a></li>
+                <li class="list-group-item"><a href="" class="text-info"><span class="iconfont">&#xe607;</span>我的水电气使用</a></li>
+                <li class="list-group-item"><a href="/user/login/logout.html" class="text-info"><span class="iconfont">&#xe607;</span>注销</a></li>
             </ul>
         </div>
     </div>

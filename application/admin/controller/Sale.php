@@ -11,9 +11,19 @@ use think\Request;
 
 //租售
 class Sale extends  Admin{
-    //添加
+
     public function index(){
-       $list=Db::name('rental')->select();
+        $name=input('name');
+        $map=array('status' => array('gt', -1));
+        if(is_numeric($name)){
+            $map['name|title']=   array('like','%'.$name.'%');
+        }else{
+            $map['title']    =   array('like', '%'.(string)$name.'%');
+        }
+      //$list = Db::name('rental')->where($map)->order(['id '=>'desc'])->paginate(3);
+        config(['list_rows'=>3]);
+        $list = $this->lists('rental',$map,'id desc');
+       //$list=Db::name('rental')->select();
        //var_dump($list);exit;
        $this->assign('list',$list);
        return $this->fetch();
@@ -25,13 +35,15 @@ class Sale extends  Admin{
             $rental = model('rental');
             //接收数据
             $post_data=\think\Request::instance()->post();
-            //var_dump($post_data);exit;
+//            var_dump($post_data);exit;
             //自动验证
             $validate = validate('rental');
             if(!$validate->check($post_data)){
                 return $this->error($validate->getError());
             }
             $post_data['create_time']=time();
+            $post_data['end_time']=strtotime($post_data['end_time']);
+            $post_data['status']=1;
             //var_dump($post_data);exit;
             //保存数据库
             $data = $rental->insert($post_data);
@@ -43,13 +55,14 @@ class Sale extends  Admin{
             }
         }
         $this->assign('info',null);
-        return $this->fetch('add');
+        return $this->fetch('edit');
     }
 
     //修改
     public function edit($id){
         //回显
         $info=Db::name('rental')->find($id);
+//        var_dump($info);exit;
         $this->assign('info',$info);
         if ($this->request->isPost()){
             $data=Request::instance()->post();
@@ -66,7 +79,7 @@ class Sale extends  Admin{
 
             }
         }
-        return $this->fetch('add');
+        return $this->fetch('edit');
     }
 
     //删除

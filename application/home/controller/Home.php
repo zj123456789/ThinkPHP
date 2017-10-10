@@ -3,6 +3,7 @@
 
 namespace app\home\controller;
 use think\Controller;
+use think\Session;
 
 
 /**
@@ -11,6 +12,12 @@ use think\Controller;
  */
 class Home extends Controller {
 	public function __construct(){
+//	    var_dump(Session::get());exit;
+	    if(!Session::get('user_auth')){
+            $this->redirect('/user/login/index.html');
+        }
+
+
 		/* 读取站点配置 */
 		$config = api('Config/lists');$config['home_view_path']='default';
 		$config ['template']['taglib_pre_load'] =   'app\common\taglib\Think,app\common\taglib\Article';

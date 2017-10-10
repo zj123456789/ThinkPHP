@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:66:"D:\www\tp\public/../application/admin/view/default/sale\index.html";i:1507023479;s:67:"D:\www\tp\public/../application/admin/view/default/public\base.html";i:1496373782;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:66:"D:\www\tp\public/../application/admin/view/default/sale\index.html";i:1507451655;s:67:"D:\www\tp\public/../application/admin/view/default/public\base.html";i:1496373782;}*/ ?>
 <!doctype html>
 <html>
 <head>
@@ -108,6 +108,12 @@
     <a class="btn" href="<?php echo url('add','pid='.$pid); ?>">新 增</a>
     <a class="btn" href="javascript:;">删 除</a>
     <button class="btn list_sort" url="<?php echo url('sort',array('pid'=>input('get.pid',0)),''); ?>">排序</button>
+    <div class="search-form fr cf">
+        <div class="sleft">
+            <input type="text" name="name" class="search-input" value="<?php echo input('name'); ?>" placeholder="请输入配置名称">
+            <a class="sch-btn" href="javascript:;" id="search" url="<?php echo url('sale/index'); ?>"><i class="btn-search"></i></a>
+        </div>
+    </div>
 </div>
 
 <div class="data-table table-striped">
@@ -128,19 +134,19 @@
         </tr>
         </thead>
         <tbody>
-        <?php if(!(empty($list) || (($list instanceof \think\Collection || $list instanceof \think\Paginator ) && $list->isEmpty()))): if(is_array($list) || $list instanceof \think\Collection || $list instanceof \think\Paginator): $i = 0; $__LIST__ = $list;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$rental): $mod = ($i % 2 );++$i;?>
+        <?php if(!(empty($list) || (($list instanceof \think\Collection || $list instanceof \think\Paginator ) && $list->isEmpty()))): if(is_array($list) || $list instanceof \think\Collection || $list instanceof \think\Paginator): $i = 0; $__LIST__ = $list;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$sale): $mod = ($i % 2 );++$i;?>
         <tr>
             <td><input class="ids row-selected" type="checkbox" name="" id="" value="<?php echo $repair['id']; ?>"> </td>
-            <td><?php echo $rental['name']; ?></td>
-            <td><?php echo $rental['tel']; ?></a></td>
-            <td><?php echo $rental['title']; ?></td>
-            <td><?php echo !empty($rental['type']) && $rental['type']==1?'出租':'出售'; ?></td>
-            <td><?php echo $rental['price']; ?><?php echo !empty($rental['company']) && $rental['company']==1?'元/月':'万元'; ?></td>
-            <td><?php echo date("Y-m-d H:i:s",$rental['create_time']); ?></td>
-            <td><?php echo date("Y-m-d H:i:s",$rental['end_time']); ?></td>
+            <td><?php echo $sale['name']; ?></td>
+            <td><?php echo $sale['tel']; ?></a></td>
+            <td><?php echo $sale['title']; ?></td>
+            <td><?php echo !empty($sale['type']) && $sale['type']==1?'出租':'出售'; ?></td>
+            <td><?php echo $sale['price']; ?><?php echo !empty($sale['company']) && $sale['company']==1?'元/月':'万元'; ?></td>
+            <td><?php echo date("Y-m-d H:i:s",$sale['create_time']); ?></td>
+            <td><?php echo date("Y-m-d H:i:s",$sale['end_time']); ?></td>
             <td>
-                <a title="编辑" href="<?php echo url('edit?id='.$rental['id'].'&pid='.$pid); ?>">编辑</a>
-                <a class="confirm ajax-get" title="删除" href="<?php echo url('del?id='.$rental['id']); ?>">删除</a>
+                <a title="编辑" href="<?php echo url('edit?id='.$sale['id'].'&pid='.$pid); ?>">编辑</a>
+                <a class="confirm ajax-get" title="删除" href="<?php echo url('del?id='.$sale['id']); ?>">删除</a>
             </td>
         </tr>
         <?php endforeach; endif; else: echo "" ;endif; else: ?>
@@ -148,6 +154,9 @@
         <?php endif; ?>
         </tbody>
     </table>
+</div>
+<div class="page">
+    <?php echo $_page; ?>
 </div>
 
         </div>
@@ -263,6 +272,26 @@
 
             if(url != undefined && url != ''){
                 window.location.href = url + '/ids/' + param;
+            }
+        });
+        //搜索功能
+        $("#search").click(function(){
+            var url = $(this).attr('url');
+            var query  = $('.search-form').find('input').serialize();
+            query = query.replace(/(&|^)(\w*?\d*?\-*?_*?)*?=?((?=&)|(?=$))/g,'');
+            query = query.replace(/^&/g,'');
+            if( url.indexOf('?')>0 ){
+                url += '&' + query;
+            }else{
+                url += '?' + query;
+            }
+            window.location.href = url;
+        });
+        //回车搜索
+        $(".search-input").keyup(function(e){
+            if(e.keyCode === 13){
+                $("#search").click();
+                return false;
             }
         });
     });

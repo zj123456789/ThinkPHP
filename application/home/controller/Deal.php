@@ -22,7 +22,6 @@ class Deal extends Home{
                 return $this->error($validate->getError());
             }
             //保存
-
             $result = Db::name('deal')->insert($data);
             if($result){//保存成功  跳转
                 $this->success('添加成功',url('index'));

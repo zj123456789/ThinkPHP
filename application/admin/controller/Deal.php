@@ -9,13 +9,23 @@ use think\Request;
 class Deal extends Admin{//http://www.tp.com/admin/deal/index.html
     //报修列表
     public function index(){
+        $name=input('name');
         //获取数据
         $map = ['status'=>['gt',-1]];
+        if(is_numeric($name)){
+            $map['username|tel']=   array('like','%'.$name.'%');
+        }else{
+            $map['username']    =   array('like', '%'.(string)$name.'%');
+        }
         //根据状态和Pid获取所有数据
-        $list = Db::name('deal')->where($map)->order(['id '=>'asc'])->paginate(3);
+        //$list = Db::name('deal')->where($map)->order(['id '=>'asc'])->paginate(3);
+      /*  <!--<div class="page">
+	        {$list->render()}
+        </div>-->*/
+        config(['list_rows'=>3]);
+        $list = $this->lists('deal',$map,'id desc');
         //分配数据
         $this->assign('list',$list);
-        $this->assign('meta_title' , '导航管理');
         //页面
         return $this->fetch();
     }

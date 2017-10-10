@@ -45,11 +45,11 @@
 
     <div class="container-fluid">
         <!--{notempty name="list"}-->
-        {volist name="list" id="life"}
+        <?php foreach($list as $k=>$life):?>
         <div class="row noticeList">
             <a href="{:url('details?id='.$life['id'])}">
                 <div class="col-xs-2">
-                    <img class="noticeImg" src="../image/1.png" />
+                    <img class="noticeImg" src="{$picture[$k]}" style="width: 300px"/>
                 </div>
                 <div class="col-xs-10">
                     <p class="title">{$life.title}</p>
@@ -60,7 +60,7 @@
 
             </a>
         </div>
-        {/volist}
+        <?php endforeach;?>
 
     </div>
 </div>

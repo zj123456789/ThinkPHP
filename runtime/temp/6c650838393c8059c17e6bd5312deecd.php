@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:64:"D:\www\tp\public/../application/admin/view/default/sale\add.html";i:1507023945;s:67:"D:\www\tp\public/../application/admin/view/default/public\base.html";i:1496373782;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:64:"D:\www\tp\public/../application/admin/view/default/sale\add.html";i:1507444763;s:67:"D:\www\tp\public/../application/admin/view/default/public\base.html";i:1496373782;}*/ ?>
 <!doctype html>
 <html>
 <head>
@@ -126,8 +126,8 @@
             <input type="text" class="text input-large" name="price" value="<?php echo (isset($info['price']) && ($info['price'] !== '')?$info['price']:''); ?>">&nbsp;
             单位：
             <select style="width: 200px;" name="company">
-                <option value="1"  <?php if($info[company]==1) echo("selected");?>>元/月</option>
-                <option value="2" <?php if($info[company]==2) echo("selected");?>>万元</option>
+                <option value="1"  <?=($info[company]==1)?"selected":''?>>元/月</option>
+                <option value="2" <?=($info[company]==2)?"selected":''?>>万元</option>
             </select>
         </div>
     </div>
@@ -137,11 +137,52 @@
         <div class="controls">
             <select style="width: 200px;" name="type" >
                 <option value="1" <?php if($info[type]==1) echo("selected");?>>出租</option>
-                <option value="2" <?php if($info[type]==2) echo("selected");?>>销售</option>
+                <option value="2" <?php if($info[type]==2) echo("selected");?>>出售</option>
             </select>
         </div>
     </div>
-
+    <div class="form-item">
+        <input type="file" id="upload_picture_path" class="">
+        <input type="hidden" name="logo" id="cover_id_path">
+        <div class="upload-img-box">
+        </div>
+    </div>
+    <script type="text/javascript">
+        //上传图片
+        /* 初始化上传插件 */
+        $("#upload_picture_path").uploadify({
+            "height": 30,
+            "swf": "/Public/static/uploadify/uploadify.swf",
+            "fileObjName": "download",
+            "buttonText": "上传图片",
+            "uploader": "/admin.php/File/uploadPicture/session_id/eh3tf5rsvcmqfiommtr6g8o1i7.html",
+            "width": 120,
+            'removeTimeout': 1,
+            'fileTypeExts': '*.jpg; *.png; *.gif;',
+            "onUploadSuccess": uploadPicturepath,
+            'onFallback': function () {
+                alert('未检测到兼容版本的Flash.');
+            }
+        });
+        function uploadPicturepath(file, data) {
+            var data = $.parseJSON(data);
+            var src = '';
+            if (data.status) {
+                $("#cover_id_path").val(data.path);
+                console.log(data.path);
+                src = data.url || '' + data.path
+                $("#cover_id_path").parent().find('.upload-img-box').html(
+                    '<div class="upload-pre-item"><img src="' + src + '"/></div>'
+                );
+            } else {
+                updateAlert(data.info);
+                setTimeout(function () {
+                    $('#top-alert').find('button').click();
+                    $(that).removeClass('disabled').prop('disabled', false);
+                }, 1500);
+            }
+        }
+    </script>
     <!--<div class="form-item">-->
     <!--<label class="item-label">模块<span class="check-tips">（所属模块）</span></label>-->
     <!--<div class="controls">-->
@@ -205,9 +246,15 @@
     <div class="form-item">
         <label class="item-label">截止日期<span class="check-tips"></span></label>
         <div class="controls">
-            <input type="text" class="text input-mid" name="end_time" value="<?php echo (isset($info['end_time']) && ($info['end_time'] !== '')?$info['end_time']:''); ?>">                    </div>
+            <input type="text" class="text input-mid" name="end_time" value="<?php echo (isset($info['end_time']) && ($info['end_time'] !== '')?$info['end_time']:''); ?>"> </div>
     </div>
-
+    <div class="form-item">
+        <label class="item-label">状态<span class="check-tips"></span></label>
+        <div class="controls">
+            正常<input type="radio" class="" name="status" value="1">
+            过期<input type="radio" class="" name="status" value="-1">
+        </div>
+    </div>
     <div class="form-item">
         <label class="item-label">电话<span class="check-tips">（联系电话）</span></label>
         <div class="controls">

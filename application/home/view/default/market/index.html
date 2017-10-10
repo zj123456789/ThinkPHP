@@ -43,28 +43,27 @@
     </nav>
     <!--导航结束-->
 
-    <div class="container-fluid">
+    <div class="container-fluid" id="content">
         <!--{notempty name="list"}-->
-        {volist name="list" id="market"}
-        <div class="row noticeList">
-            <a href="{:url('details?id='.$market['id'])}">
-                <div class="col-xs-2">
-                    <img class="noticeImg" src="/image/1.png" />
-                </div>
-                <div class="col-xs-10">
-                    <p class="title">{$market.title}</p>
-                    <p class="intro">{$market.description}</p>
-                    <p class="info">浏览量:{$market.view} <span class="pull-right">{$market.create_time|date="Y-m-d H:i:s",###}</span> </p>
-                </div>
-            </a>
-        </div>
-        {/volist}
+
 
     </div>
 </div>
+
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="/jquery-1.11.2.min.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="/bootstrap/js/bootstrap.min.js"></script>
 </body>
+{block name="script"}
+<script type="text/javascript">
+    var load = function (no) {
+        $('.load').remove();
+        $.get("{:url('Market/ajax')}",{'page':no},function (data) {
+            $('#content').append(data);
+        });
+    };
+    load(1);
+</script>
+{/block}
 </html>

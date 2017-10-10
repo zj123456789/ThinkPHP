@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:1:{s:69:"D:\www\tp\public/../application/home/view/default/activity\index.html";i:1507297341;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:1:{s:69:"D:\www\tp\public/../application/home/view/default/activity\index.html";i:1507467169;}*/ ?>
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -46,24 +46,21 @@
 
     <div class="container-fluid">
         <!--{notempty name="list"}-->
-        <?php if(is_array($list) || $list instanceof \think\Collection || $list instanceof \think\Paginator): $i = 0; $__LIST__ = $list;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$activity): $mod = ($i % 2 );++$i;?>
+        <?php foreach($list as $k=>$activity):?>
         <div class="row noticeList">
             <a href="<?php echo url('details?id='.$activity['id']); ?>">
-                <div class="col-xs-2">
-                    <img class="noticeImg" src="/image/1.png" />
+                <div class="act">
+                    <img class="noticeImg" src="<?php echo $picture[$k]; ?>" style="width: 300px"/>
+                    <a href="javascript:;" class="add_activity" id="<?php echo $activity['id']; ?>"><strong>加入活动</strong></a>
                 </div>
                 <div class="col-xs-10">
-                    <p class="title"><?php echo $activity['title']; ?></p>
+                    <p class="title"><strong><?php echo $activity['title']; ?></strong></p>
                     <p class="intro"><?php echo $activity['description']; ?></p>
                     <p class="info">浏览量:<?php echo $activity['view']; ?> <span class="pull-right"><?php echo date("Y-m-d H:i:s",$activity['create_time']); ?></span> </p>
                 </div>
-                <img class="noticeImg" src="/image/1.png" />
-        </div>
-                </div>
             </a>
         </div>
-        <?php endforeach; endif; else: echo "" ;endif; ?>
-
+        <?php endforeach;?>
     </div>
 </div>
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
@@ -72,3 +69,15 @@
 <script src="/bootstrap/js/bootstrap.min.js"></script>
 </body>
 </html>
+<script type="text/javascript">
+    $('.add_activity').on('click',function() {
+        var id=$(this).attr('id');
+            $.get('/home/activity/add.html',{'id':id},function (data) {
+                if(data=='true'){
+                    alert('参加活动成功');
+                }else{
+                    alert('您已经参加过活动')
+                }
+            })
+    })
+</script>
